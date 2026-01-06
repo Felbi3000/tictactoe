@@ -13,16 +13,49 @@ const gameboard = (function () {
 
     const getBoard = () => board;
 
-    const placeToken = ( row, column) => {
-        board[row][column].addToken();
+    const placeToken = (row, column) => {
+        board[row][column].addToken(game.getActivePlayer().token);
     }
 
     const printBoard = () => {
         const filledBoard = board.map((row) => row.map((cell) => cell.getValue()))
         console.log(filledBoard);
     }
+    const checkoccupied = (row, column) => {
+        if (board[row][column].getValue() !== 0) {
+            return true;
+        }
+    }
 
-    return {getBoard, placeToken, printBoard, board};
+    const checkWin = (playerToken) => {
+        for (let i = 0; i < dimension; i++) {
+            if (board[i][0].getValue() === playerToken &&
+                board[i][1].getValue() === playerToken &&
+                board[i][2].getValue() === playerToken
+            ){return true;}
+        }
+        
+        for (let j= 0; j < dimension; j++){
+            if (board[0][j].getValue() === playerToken &&
+                board[1][j].getValue() === playerToken &&
+                board[2][j].getValue() === playerToken
+            ){return true;}
+        }
+        
+        if (board[0][0].getValue() === playerToken &&
+            board[1][1].getValue() === playerToken &&
+            board[2][2].getValue() === playerToken
+        ) {return true;}
+        
+        if (board[2][0].getValue() === playerToken &&
+            board[1][1].getValue() === playerToken &&
+            board[0][2].getValue() === playerToken
+        ){return true;}
+
+        return false;        
+    }
+
+    return {getBoard, placeToken, printBoard, checkWin, checkoccupied};
 
 })();
 
@@ -69,17 +102,27 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     };
 
     const playRound = (row, column) => {
-        console.log(`Placing ${activePlayer}'s token at row ${row}, column ${column}.`);
+        console.log(`Placing ${getActivePlayer().name}'s token at row ${row}, column ${column}.`);
+        if (board.checkoccupied(row, column)){
+            console.log(`Field already taken, choose another one`);
+            printNewRound();
+            return;
+        } else {
         board.placeToken(row, column, getActivePlayer().token);
 
         // Winner check
-
+        if(board.checkWin(getActivePlayer().token)){
+            console.log(`${getActivePlayer().name} is the winner!`);
+            board.printBoard();
+        }else{
         switchPlayerTurn();
         printNewRound();
+        };
+        };
     };
     printNewRound();
 
     return {playRound, getActivePlayer};
 }
 
-//const game = gameLogic();
+const game = gameLogic();
