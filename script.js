@@ -13,8 +13,8 @@ const gameboard = (function () {
 
     const getBoard = () => board;
 
-    const placeToken = (column, row, player) => {
-
+    const placeToken = ( row, column) => {
+        board[row][column].addToken();
     }
 
     const printBoard = () => {
@@ -22,7 +22,7 @@ const gameboard = (function () {
         console.log(filledBoard);
     }
 
-    return {getBoard, placeToken, printBoard};
+    return {getBoard, placeToken, printBoard, board};
 
 })();
 
@@ -82,4 +82,4 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     return {playRound, getActivePlayer};
 }
 
-const game = gameLogic();
+//const game = gameLogic();
