@@ -1,0 +1,27 @@
+#title {
+
+}
+
+#formPlayerName {
+    display: flex;
+    flex-direction: column;
+    gap: .2em;
+}
+
+#main {
+    display: grid;
+    grid-template-columns: 5em 5em 5em;
+  grid-template-rows: 5em 5em 5em;
+    list-style-type: none;
+}
+
+#main div {
+    border: .1em solid black;
+    background-color: white;
+    padding: 0;
+    margin: -.1em;
+}
+
+#main>div:hover {
+    background-color:azure;
+}

@@ -134,28 +134,8 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     printNewRound();
 
     return {playRound, getActivePlayer};
-};
-
-function screenController () {
-    const formNames = document.querySelector("#formPlayerName");
-    const formButton = document.querySelector("#formButton");
-    const cells = document.querySelectorAll(".cell");
-
-    cells.forEach(cell => {
-        cell.addEventListener('click', () => {
-           alert(cell.getAttribute("id"));
-            // cell.getAttribute("id");
-        })
-    })
-    function updateScreen() {
-
-    };
-
-    function clickHandlerBoard () {
-        
-    }
 }
 
 
+
 const game = gameLogic();
-screenController();
