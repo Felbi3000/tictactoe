@@ -87,13 +87,17 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     const players = [
         {
             name : playerOneName,
-            token : 1
+            token : "X"
         },{
             name : playerTwoName,
-            token : 2
+            token : "O"
         }
     ];  
+    const setPlayerNames = (name1, name2) => {
+        players[0].name = name1;
+        players[1].name = name2;
 
+    }
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
@@ -133,20 +137,30 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     };
     printNewRound();
 
-    return {playRound, getActivePlayer};
+    return {playRound, getActivePlayer, setPlayerNames};
 };
 
 function screenController () {
+    // get DOM elements
     const formNames = document.querySelector("#formPlayerName");
+    const player1Name = document.querySelector("#player1Name");
+    const player2Name = document.querySelector("#player2Name");
     const formButton = document.querySelector("#formButton");
     const cells = document.querySelectorAll(".cell");
 
+    // set up Event listeners
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
            alert(cell.getAttribute("id"));
             // cell.getAttribute("id");
         })
     })
+
+    formButton.addEventListener('click', () => {
+        game.setPlayerNames(player1Name.value,player2Name.value);
+        formNames.setAttribute("style", "visibility: hidden;");
+    })
+
     function updateScreen() {
 
     };
