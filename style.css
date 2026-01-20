@@ -25,3 +25,9 @@
 #main>div:hover {
     background-color:azure;
 }
+.X {
+    background-color:brown !important;
+}
+.O {
+    background-color:aquamarine !important;
+}

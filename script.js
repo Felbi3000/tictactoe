@@ -128,6 +128,7 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
         // Winner check
         if(board.checkWin(getActivePlayer().token)){
             console.log(`${getActivePlayer().name} is the winner!`);
+            // screenController.message.textContent = `${getActivePlayer().name} is the winner!`
             board.printBoard();
         }else{
         switchPlayerTurn();
@@ -147,12 +148,14 @@ function screenController () {
     const player2Name = document.querySelector("#player2Name");
     const formButton = document.querySelector("#formButton");
     const cells = document.querySelectorAll(".cell");
+    const message = document.querySelector("#message");
 
     // set up Event listeners
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
-           alert(cell.getAttribute("id"));
-            // cell.getAttribute("id");
+            // alert(cell.getAttribute("data-row") + cell.getAttribute("data-col"));
+            game.playRound(cell.getAttribute("data-row"), cell.getAttribute("data-col"));
+            cell.classList.add(game.getActivePlayer().token);
         })
     })
 
