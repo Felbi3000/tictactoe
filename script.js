@@ -171,6 +171,12 @@ function screenController () {
     function clickHandlerBoard () {
         
     }
+
+    function setStatus (text) {
+        message.textContent = text;
+    }
+
+    return {setStatus, message};
 }
 
 
