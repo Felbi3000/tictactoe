@@ -114,6 +114,7 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn`);
+        screen.setStatus(`${getActivePlayer().name}'s turn`);
     };
 
     const playRound = (row, column) => {
@@ -123,12 +124,11 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
             printNewRound();
             return;
         } else {
-        board.placeToken(row, column, getActivePlayer().token);
+        board.placeToken(row, column);
 
         // Winner check
         if(board.checkWin(getActivePlayer().token)){
             console.log(`${getActivePlayer().name} is the winner!`);
-            // screenController.message.textContent = `${getActivePlayer().name} is the winner!`
             board.printBoard();
         }else{
         switchPlayerTurn();
@@ -176,9 +176,9 @@ function screenController () {
         message.textContent = text;
     }
 
-    return {setStatus, message};
+    return {setStatus};
 }
 
 
 const game = gameLogic();
-screenController();
+const screen = screenController();
