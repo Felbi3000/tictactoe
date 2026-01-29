@@ -99,6 +99,9 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
 
     }
     let activePlayer = players[0];
+    
+    // create gamestate to disable play after win
+    let gameActive = true;
 
     const switchPlayerTurn = () => {
         if (activePlayer === players[0]) {
@@ -110,17 +113,27 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
 
     const getActivePlayer = () => activePlayer;
 
+    // getter for gamestate
+    const isGameActive = () => gameActive;
+
     // print the status of the board and activePlayer 
     const printNewRound = () => {
         board.printBoard();
+        
+        const message = `${getActivePlayer().name}'s turn`;
+        console.log(message);
+        screen.setStatus(message); // Display to UI
         console.log(`${getActivePlayer().name}'s turn`);
-        screen.setStatus(`${getActivePlayer().name}'s turn`);
     };
 
     const playRound = (row, column) => {
+        if (!gameActive) return;
+
         console.log(`Placing ${getActivePlayer().name}'s token at row ${row}, column ${column}.`);
         if (board.checkoccupied(row, column)){
-            console.log(`Field already taken, choose another one`);
+            const message = `Field already taken, choose another one`;
+            console.log(message);
+            screen.setStatus(message); // Display to UI
             printNewRound();
             return;
         } else {
@@ -128,8 +141,13 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
 
         // Winner check
         if(board.checkWin(getActivePlayer().token)){
-            console.log(`${getActivePlayer().name} is the winner!`);
             board.printBoard();
+            const message = `${getActivePlayer().name} is the winner!`;
+            console.log(message);
+            screen.setStatus(message); // Display to UI
+            console.log(`${getActivePlayer().name} is the winner!`);
+            gameActive = false;
+            
         }else{
         switchPlayerTurn();
         printNewRound();
@@ -138,7 +156,7 @@ function gameLogic (playerOneName = "Player One", playerTwoName = "Player Two") 
     };
     printNewRound();
 
-    return {playRound, getActivePlayer, setPlayerNames};
+    return {playRound, getActivePlayer, setPlayerNames, isGameActive};
 };
 
 function screenController () {
@@ -147,30 +165,28 @@ function screenController () {
     const player1Name = document.querySelector("#player1Name");
     const player2Name = document.querySelector("#player2Name");
     const formButton = document.querySelector("#formButton");
-    const cells = document.querySelectorAll(".cell");
     const message = document.querySelector("#message");
+    const gameArea = document.querySelector("#main");
+    const cells = document.querySelectorAll(".cell");
+
 
     // set up Event listeners
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
-            // alert(cell.getAttribute("data-row") + cell.getAttribute("data-col"));
-            game.playRound(cell.getAttribute("data-row"), cell.getAttribute("data-col"));
-            cell.classList.add(game.getActivePlayer().token);
+            if (game.isGameActive()) {
+                cell.classList.add(game.getActivePlayer().token);
+                game.playRound(cell.getAttribute("data-row"), cell.getAttribute("data-col"));
+            }
         })
     })
 
     formButton.addEventListener('click', () => {
         game.setPlayerNames(player1Name.value,player2Name.value);
         formNames.setAttribute("style", "visibility: hidden;");
+        gameArea.setAttribute("style", "visibility: visible;");
+        const message = `${getActivePlayer().name}'s turn`;
+        setStatus(message);
     })
-
-    function updateScreen() {
-
-    };
-
-    function clickHandlerBoard () {
-        
-    }
 
     function setStatus (text) {
         message.textContent = text;
@@ -180,5 +196,5 @@ function screenController () {
 }
 
 
-const game = gameLogic();
 const screen = screenController();
+const game = gameLogic();
